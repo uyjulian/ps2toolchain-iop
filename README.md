@@ -10,7 +10,7 @@ If you're trying to install in your machine the **WHOLE PS2 Development Environm
 
 ## What these scripts do
 
-These scripts download (with wget) and install [binutils 2.14](http://www.gnu.org/software/binutils/ "binutils") (iop), [gcc 3.2.3](https://gcc.gnu.org/ "gcc") (iop).
+These scripts download (with wget) and install [binutils 2.25.1](http://www.gnu.org/software/binutils/ "binutils") (iop), [gcc 11.1.0](https://gcc.gnu.org/ "gcc") (iop).
 
 ## Requirements
 

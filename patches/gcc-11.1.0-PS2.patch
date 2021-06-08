@@ -1,0 +1,75 @@
+Binary files gcc-11.1.0.orig/.DS_Store and gcc-11.1.0/.DS_Store differ
+diff -burN gcc-11.1.0.orig/config.sub gcc-11.1.0/config.sub
+--- gcc-11.1.0.orig/config.sub	2021-04-27 05:00:12.000000000 -0500
++++ gcc-11.1.0/config.sub	2021-06-08 15:39:59.424459308 -0500
+@@ -356,6 +356,10 @@
+ 				basic_machine=i386-mach
+ 				basic_os=mach
+ 				;;
++			iop)
++				basic_machine=mipsel-scei
++				os=irx
++				;;
+ 			isi68 | isi)
+ 				basic_machine=m68k-isi
+ 				basic_os=sysv
+@@ -1696,6 +1700,7 @@
+ 	# The portable systems comes first.
+ 	# Each alternative MUST end in a * to match a version number.
+ 	gnu* | android* | bsd* | mach* | minix* | genix* | ultrix* | irix* \
++	     | irx* \
+ 	     | *vms* | esix* | aix* | cnk* | sunos | sunos[34]* \
+ 	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
+ 	     | sym* |  plan9* | psp* | sim* | xray* | os68k* | v88r* \
+diff -burN gcc-11.1.0.orig/configure gcc-11.1.0/configure
+--- gcc-11.1.0.orig/configure	2021-04-27 05:00:12.000000000 -0500
++++ gcc-11.1.0/configure	2021-06-08 15:38:22.725414617 -0500
+@@ -3984,6 +3984,8 @@
+     ;;
+   mips*-*-linux*)
+     ;;
++  mipsel-*-irx*)
++    ;;
+   mips*-*-ultrix* | mips*-*-osf* | mips*-*-ecoff* | mips*-*-pe* \
+   | mips*-*-irix* | mips*-*-lnews* | mips*-*-riscos*)
+     noconfigdirs="$noconfigdirs ld gas gprof"
+diff -burN gcc-11.1.0.orig/configure.ac gcc-11.1.0/configure.ac
+--- gcc-11.1.0.orig/configure.ac	2021-04-27 05:00:12.000000000 -0500
++++ gcc-11.1.0/configure.ac	2021-06-08 15:38:22.728742904 -0500
+@@ -1258,6 +1258,8 @@
+     ;;
+   mips*-*-linux*)
+     ;;
++  mipsel-*-irx*)
++    ;;
+   mips*-*-ultrix* | mips*-*-osf* | mips*-*-ecoff* | mips*-*-pe* \
+   | mips*-*-irix* | mips*-*-lnews* | mips*-*-riscos*)
+     noconfigdirs="$noconfigdirs ld gas gprof"
+diff -burN gcc-11.1.0.orig/gcc/config.gcc gcc-11.1.0/gcc/config.gcc
+--- gcc-11.1.0.orig/gcc/config.gcc	2021-04-27 05:00:13.000000000 -0500
++++ gcc-11.1.0/gcc/config.gcc	2021-06-08 15:38:22.733400224 -0500
+@@ -2714,6 +2714,11 @@
+ 	tmake_file="mips/t-elf"
+ 	tm_defines="${tm_defines} MIPS_ISA_DEFAULT=3 MIPS_ABI_DEFAULT=ABI_N32"
+ 	;;
++mipsel-*-irx*)
++	tm_file="dbxelf.h elfos.h newlib-stdint.h ${tm_file} mips/elf.h"
++	tmake_file="mips/t-elf mips/dbx.h"
++	target_cpu_default=MASK_SOFT_FLOAT_ABI
++	;;
+ mips64-*-elf* | mips64el-*-elf*)
+ 	tm_file="elfos.h newlib-stdint.h ${tm_file} mips/elf.h"
+ 	tmake_file="mips/t-elf"
+diff -burN gcc-11.1.0.orig/libgcc/config.host gcc-11.1.0/libgcc/config.host
+--- gcc-11.1.0.orig/libgcc/config.host	2021-04-27 05:00:15.000000000 -0500
++++ gcc-11.1.0/libgcc/config.host	2021-06-08 15:38:22.736542766 -0500
+@@ -1024,6 +1024,9 @@
+ 	tmake_file="$tmake_file mips/t-elf mips/t-crtstuff mips/t-mips16"
+ 	extra_parts="$extra_parts crti.o crtn.o"
+ 	;;
++mipsel-*-irx)
++	tmake_file="$tmake_file mips/t-elf"
++	;;
+ mipsr5900-*-elf* | mipsr5900el-*-elf*)
+ 	tmake_file="$tmake_file mips/t-elf mips/t-crtstuff"
+ 	extra_parts="$extra_parts crti.o crtn.o"
