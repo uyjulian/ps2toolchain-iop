@@ -17,12 +17,11 @@ download_src()
   fi
 
   if test ! -d "$REPO_FOLDER"; then
-    git clone --depth 1 -b "$REPO_REF" "$REPO_URL" "$REPO_FOLDER"
+    git clone --depth 1 --no-checkout -b "$REPO_REF" "$REPO_URL" "$REPO_FOLDER"
   else
     git -C "$REPO_FOLDER" remote set-url origin "$REPO_URL"
-    git -C "$REPO_FOLDER" fetch origin "$REPO_REF" --depth=1
-    git -C "$REPO_FOLDER" checkout -f FETCH_HEAD
   fi
+  git -C "$REPO_FOLDER" fetch origin "$REPO_REF" --depth=1
 }
 
 ## Read information from the configuration file.
@@ -49,8 +48,8 @@ REPO_FOLDER_GCC="$REPO_FOLDER"
 # Combine the binutils and GCC trees
 mkdir -p "binutils-gcc-combined"
 
-tar -C "$REPO_FOLDER_BINUTILS" -cBf - . | tar -C "binutils-gcc-combined" -xBf -
-tar -C "$REPO_FOLDER_GCC" -cBf - . | tar -C "binutils-gcc-combined" -xBf -
+git -C "$REPO_FOLDER_BINUTILS" archive --format=tar FETCH_HEAD | tar -C "binutils-gcc-combined" -xBf -
+git -C "$REPO_FOLDER_GCC" archive --format=tar FETCH_HEAD | tar -C "binutils-gcc-combined" -xBf -
 
 REPO_FOLDER="binutils-gcc-combined"
 
