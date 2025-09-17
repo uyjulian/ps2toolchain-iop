@@ -49,8 +49,8 @@ REPO_FOLDER_GCC="$REPO_FOLDER"
 # Combine the binutils and GCC trees
 mkdir -p "binutils-gcc-combined"
 
-cd $REPO_FOLDER_BINUTILS && find . -print | cpio -pdlm ../binutils-gcc-combined && cd ..
-cd $REPO_FOLDER_GCC && find . -print | cpio -pdlmu ../binutils-gcc-combined && cd ..
+tar -C "$REPO_FOLDER_BINUTILS" -cBf - . | tar -C "binutils-gcc-combined" -xBf -
+tar -C "$REPO_FOLDER_GCC" -cBf - . | tar -C "binutils-gcc-combined" -xBf -
 
 REPO_FOLDER="binutils-gcc-combined"
 
